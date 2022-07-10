@@ -11,10 +11,11 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 import React, { useEffect, useState } from "react";
-import todo from "../store/todo";
 import { uid } from "uid";
 import { observer } from "mobx-react-lite";
 import { toJS } from "mobx";
+import { modalStyle } from "../theme";
+import { todoStore } from "../store/todoStore";
 
 interface TaskModal {
   modal: boolean;
@@ -24,28 +25,20 @@ interface TaskModal {
 }
 
 export const ManageTaskModal: React.FC<TaskModal> = observer(({ modal, setModal, edit, id }) => {
-  const modalStyle = {
-    position: "absolute" as "absolute",
-    top: "30%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 600,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 2,
-  };
-
   const [newTodoTitle, setNewTodoTitle] = useState<string>("");
   const [newTodoDescription, setNewTodoDescription] = useState<string>("");
   const [newTodoDate, setNewTodoDate] = useState<string>("");
   const [newTodoTags, setNewTodoTags] = useState<string>("");
 
   useEffect(() => {
+    // ? If have edit prop then launch modal in "edit" mode (change callback, change "add" button text to "edit")
     if (edit) {
-      const todos = toJS(todo.todos);
+      // ? Fetch information about current Todo and set is as value to inputs
+      // ? toJS makes mobx arrays readable as JS arrays
+      const todos = toJS(todoStore.todos);
+      // ? Get current todo
       const currentTodo = todos.filter((el) => el.id === id);
-
+      // ? Set values
       setNewTodoTitle(currentTodo[0].title);
       setNewTodoDescription(currentTodo[0].description);
       currentTodo[0].tags && setNewTodoTags(currentTodo[0].tags);
@@ -53,14 +46,24 @@ export const ManageTaskModal: React.FC<TaskModal> = observer(({ modal, setModal,
     }
   }, [id, edit]);
 
-  const editTodo = () => {
-    todo.editTodo();
+  const editTodo = (id: string) => {
+    newTodoTitle &&
+      newTodoDescription &&
+      todoStore.updateTodo(id, {
+        id: id,
+        title: newTodoTitle,
+        description: newTodoDescription,
+        isCompleted: false,
+        date: newTodoDate,
+        tags: newTodoTags,
+      });
   };
 
   const addTodo = () => {
+    // ? Title and description are required, so check if they are not empty string
     newTodoTitle &&
       newTodoDescription &&
-      todo.addTodo({
+      todoStore.addTodo({
         id: uid(),
         title: newTodoTitle,
         description: newTodoDescription,
@@ -68,6 +71,7 @@ export const ManageTaskModal: React.FC<TaskModal> = observer(({ modal, setModal,
         date: newTodoDate,
         tags: newTodoTags,
       });
+    // ? Close modal and set values to empty strings
     setModal(false);
     setNewTodoTitle("");
     setNewTodoDescription("");
@@ -75,7 +79,8 @@ export const ManageTaskModal: React.FC<TaskModal> = observer(({ modal, setModal,
   };
 
   const handleSubmit = () => {
-    edit ? editTodo() : addTodo();
+    // ? If launched in "edit" mode make edit callback, else make add callback
+    edit ? id && editTodo(id) : addTodo();
   };
 
   return (

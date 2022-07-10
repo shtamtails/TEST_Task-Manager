@@ -1,27 +1,22 @@
 import { Box, Chip, IconButton, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
-import todo, { ITodo } from "../store/todo";
+import { ITodo, todoStore } from "../store/todoStore";
 import SettingsIcon from "@mui/icons-material/Settings";
+import CheckIcon from "@mui/icons-material/Check";
 import { useState } from "react";
 import { ManageTaskModal } from "../modals/ManageTaskModal";
+import { getDateFromString, getTags } from "../utils/utils";
+import { appStore } from "../store/appStore";
 
 export const Todo: React.FC<ITodo> = ({ id, title, description, isCompleted, date, tags }) => {
   const [editModal, setEditModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const getDateFromString = (date: string) => {
-    const newDate = new Date(date);
-    const currentDate = Date.now();
-    // console.log(currentDate > newDate.getTime()); // ! then outdated
-    return newDate.toLocaleString("default", { day: "2-digit", month: "long", year: "numeric" });
-  };
-  const getTags = (tags: string) => {
-    const newTags = tags.replaceAll(" ", "").split(",");
-    return newTags.map((el, i) => (
-      <Chip variant="outlined" key={i} sx={{ marginLeft: "10px" }} label={el} />
-    ));
+  const handleTagClick = (tag: string) => {
+    appStore.setTagFilter(tag);
+    appStore.setFilter("tags");
   };
 
   return (
@@ -42,7 +37,18 @@ export const Todo: React.FC<ITodo> = ({ id, title, description, isCompleted, dat
           variant="h6"
         >
           {title}
-          {tags && getTags(tags)}
+          {tags &&
+            getTags(tags).map((tag, i) => (
+              <Chip
+                onClick={() => {
+                  handleTagClick(tag);
+                }}
+                variant="outlined"
+                key={i}
+                sx={{ marginLeft: "10px" }}
+                label={tag}
+              />
+            ))}
         </Typography>
         <Box display="flex" sx={{ justifyContent: "center", alignItems: "center" }}>
           {date && <Typography color="GrayText">{getDateFromString(date)}</Typography>}
@@ -53,6 +59,17 @@ export const Todo: React.FC<ITodo> = ({ id, title, description, isCompleted, dat
           >
             <SettingsIcon />
           </IconButton>
+          {!isCompleted && (
+            <IconButton
+              size="small"
+              onClick={() => {
+                todoStore.completeTodo(id);
+              }}
+            >
+              <CheckIcon />
+            </IconButton>
+          )}
+
           <Menu
             open={open}
             onClose={() => {
@@ -71,7 +88,7 @@ export const Todo: React.FC<ITodo> = ({ id, title, description, isCompleted, dat
             <MenuItem
               onClick={() => {
                 setAnchorEl(null);
-                todo.removeTodo(id);
+                todoStore.removeTodo(id);
               }}
             >
               Delete
