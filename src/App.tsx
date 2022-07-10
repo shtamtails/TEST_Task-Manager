@@ -1,44 +1,22 @@
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
-  ClickAwayListener,
   Container,
-  IconButton,
-  Input,
-  List,
-  ListItemButton,
-  ListItemText,
-  ListSubheader,
-  Modal,
   Stack,
-  TextField,
-  Tooltip,
-  tooltipClasses,
-  TooltipProps,
   Typography,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Task } from "./components/Task";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { Todo } from "./components/Todo";
+import { useEffect, useState } from "react";
+import { observer } from "mobx-react-lite";
+import todo from "./store/todo";
+import { ManageTaskModal } from "./modals/ManageTaskModal";
 
-function App() {
-  const [filterOpen, setFilterOpen] = useState<boolean>(false);
+const App = observer(() => {
   const [newTaskModal, setNewTaskModal] = useState<boolean>(false);
-
-  const modalStyle = {
-    position: "absolute" as "absolute",
-    top: "30%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 2,
-  };
-
   const theme = createTheme({
     components: {
       MuiTooltip: {
@@ -67,10 +45,14 @@ function App() {
     },
   });
 
+  useEffect(() => {
+    todo.parseFromLocalStorage();
+  }, []);
+
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Container sx={{}} maxWidth="md">
+        <Container maxWidth="md">
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography
               variant="h5"
@@ -80,75 +62,6 @@ function App() {
               Tasks:
             </Typography>
             <Box>
-              <ClickAwayListener onClickAway={() => setFilterOpen(false)}>
-                <Tooltip
-                  arrow
-                  PopperProps={{
-                    disablePortal: true,
-                  }}
-                  disableFocusListener
-                  disableHoverListener
-                  disableTouchListener
-                  open={filterOpen}
-                  onClick={() => {
-                    setFilterOpen(!filterOpen);
-                  }}
-                  title={
-                    <>
-                      <List
-                        sx={{
-                          bgcolor: "#fff",
-                          color: "#000",
-                          width: "120px",
-                          border: "1px solid #000",
-                          boxShadow: "0px 6px 8px 0px rgba(34, 60, 80, 0.2);",
-                        }}
-                        subheader={
-                          <ListSubheader
-                            sx={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              borderBottom: "1px solid #000",
-                            }}
-                          >
-                            Filter by:
-                          </ListSubheader>
-                        }
-                      >
-                        <ListItemButton
-                          sx={{
-                            width: "100%",
-                            borderBottom: "1px solid #000",
-                          }}
-                        >
-                          <ListItemText
-                            sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-                          >
-                            Date
-                          </ListItemText>
-                        </ListItemButton>
-                        <ListItemButton
-                          sx={{
-                            width: "100%",
-                          }}
-                        >
-                          <ListItemText
-                            sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-                          >
-                            Status
-                          </ListItemText>
-                        </ListItemButton>
-                      </List>
-                    </>
-                  }
-                >
-                  <IconButton color="primary" sx={{ marginRight: "10px" }}>
-                    <FilterAltOutlinedIcon />
-                  </IconButton>
-                </Tooltip>
-              </ClickAwayListener>
-
               <Button
                 variant="contained"
                 color="primary"
@@ -161,86 +74,69 @@ function App() {
               </Button>
             </Box>
           </Stack>
-          <Task
-            title="Learn JavaScript basics"
-            description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente recusandae cum, ullam
-        tempore, a quae architecto, obcaecati commodi temporibus eligendi magnam eum vero
-        accusantium quibusdam. Quo earum saepe atque fugiat adipisci, consequatur aliquid odit
-        blanditiis deleniti sed expedita cumque eius provident porro dolore, repellat voluptas
-        delectus tempore qui consequuntur quisquam."
-            isDone={false}
-          />
-          <Task
-            title="Learn JavaScript basics"
-            description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente recusandae cum, ullam
-        tempore, a quae architecto, obcaecati commodi temporibus eligendi magnam eum vero
-        accusantium quibusdam. Quo earum saepe atque fugiat adipisci, consequatur aliquid odit
-        blanditiis deleniti sed expedita cumque eius provident porro dolore, repellat voluptas
-        delectus tempore qui consequuntur quisquam."
-            isDone={false}
-          />
-          <Task
-            title="Learn JavaScript basics"
-            description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente recusandae cum, ullam
-        tempore, a quae architecto, obcaecati commodi temporibus eligendi magnam eum vero
-        accusantium quibusdam. Quo earum saepe atque fugiat adipisci, consequatur aliquid odit
-        blanditiis deleniti sed expedita cumque eius provident porro dolore, repellat voluptas
-        delectus tempore qui consequuntur quisquam."
-            isDone={false}
-          />
-          <Task
-            title="Learn JavaScript basics"
-            description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente recusandae cum, ullam
-        tempore, a quae architecto, obcaecati commodi temporibus eligendi magnam eum vero
-        accusantium quibusdam. Quo earum saepe atque fugiat adipisci, consequatur aliquid odit
-        blanditiis deleniti sed expedita cumque eius provident porro dolore, repellat voluptas
-        delectus tempore qui consequuntur quisquam."
-            isDone={false}
-          />
+          {todo.todos.map(
+            (el) =>
+              !el.isCompleted && (
+                <Todo
+                  key={el.id}
+                  id={el.id}
+                  title={el.title}
+                  description={el.description}
+                  date={el.date}
+                  isCompleted={el.isCompleted}
+                  tags={el.tags}
+                />
+              )
+          )}
+
+          <Accordion>
+            <AccordionSummary>
+              <Typography>Completed:</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {todo.todos.map(
+                (el) =>
+                  el.isCompleted && (
+                    <Todo
+                      key={el.id}
+                      id={el.id}
+                      title={el.title}
+                      description={el.description}
+                      date={el.date}
+                      isCompleted={el.isCompleted}
+                      tags={el.tags}
+                    />
+                  )
+              )}
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary>
+              <Typography>Outdated:</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {todo.todos
+                .filter((todo) => todo.date && Date.now() > new Date(todo.date).getTime())
+                .map((el) => {
+                  return (
+                    <Todo
+                      key={el.id}
+                      id={el.id}
+                      title={el.title}
+                      description={el.description}
+                      date={el.date}
+                      isCompleted={el.isCompleted}
+                      tags={el.tags}
+                    />
+                  );
+                })}
+            </AccordionDetails>
+          </Accordion>
         </Container>
-        <Modal
-          open={newTaskModal}
-          onClose={() => {
-            setNewTaskModal(false);
-          }}
-        >
-          <Container sx={modalStyle}>
-            <Box
-              sx={{ borderBottom: "2px solid #000" }}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Typography variant="h6">New Task</Typography>
-              <IconButton
-                onClick={() => {
-                  setNewTaskModal(false);
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Box>
-            <Box sx={{ marginTop: "15px" }}>
-              <Box sx={{ padding: "5px 0px" }}>
-                <TextField label="Title" required fullWidth size="small" />
-              </Box>
-              <Box sx={{ padding: "5px 0px" }}>
-                <TextField label="Description" required fullWidth size="small" />
-              </Box>
-              <Box sx={{ padding: "5px 0px" }}>
-                <TextField type="date" fullWidth size="small" required />
-              </Box>
-              <Box sx={{ padding: "5px 0px" }}>
-                <Button variant="contained" fullWidth>
-                  Add
-                </Button>
-              </Box>
-            </Box>
-          </Container>
-        </Modal>
+        <ManageTaskModal modal={newTaskModal} setModal={setNewTaskModal} />
       </ThemeProvider>
     </>
   );
-}
+});
 
 export default App;
