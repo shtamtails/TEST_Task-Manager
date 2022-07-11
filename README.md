@@ -9,3 +9,11 @@ Project should contain:
 - Editing all task info / moving task into completed category
 
 Deployed build available at: https://cutt.ly/YLcqilS
+
+#### Tech Stack:
+- React
+- TypeScript
+- MobX
+- React Router
+- MUI (for modals, chips, buttons)
+- SCSS
