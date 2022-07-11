@@ -16,12 +16,14 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": "./src",
+    // "baseUrl": "src",
     "paths": {
-      "@ui/*": ["./components/UI/*"],
-      "@store/*": ["./store/*"],
-      "@interfaces/*": ["./interfaces/*"],
-      "@utils/*": ["./utils/*"]
+      "@components/*": ["/components/*"],
+      "@interfaces/*": ["/interfaces/*"],
+      "@store/*": ["/store/*"],
+      "@utils/*": ["/utils/*"],
+      "@pages/*": ["/pages/*"]
     }
-  },
-  "include": ["src"]
+  }
+  // "include": ["src"]
 }

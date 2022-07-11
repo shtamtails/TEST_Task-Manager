@@ -1,11 +1,10 @@
-import { Button, Chip, IconButton } from "@mui/material";
-import { appStore } from "@store/appStore";
-import { ManageTaskModal } from "@ui/Modal/ManageTaskModal";
-import { memo, useState } from "react";
-import { FilterMenu } from "./FilterMenu";
+import { Button, IconButton } from "@mui/material";
+import { useState } from "react";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { FilterMenu } from "./FilterMenu";
+import { ManageTaskModal } from "components/Modal/ManageTaskModal";
 
-export const Header: React.FC = memo(() => {
+export const Header: React.FC = () => {
   const [newTaskModal, setNewTaskModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -13,25 +12,12 @@ export const Header: React.FC = memo(() => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleTagClick = () => {
-    appStore.setTagFilter("");
-    appStore.setFilter("default");
-  };
+  const handleTagClick = () => {};
 
   return (
     <>
       <header>
-        <div className="header-title">
-          Tasks:
-          {appStore.tagsFilter && (
-            <Chip
-              onClick={handleTagClick}
-              label={`${appStore.tagsFilter}`}
-              variant="outlined"
-              sx={{ marginLeft: "10px" }}
-            />
-          )}
-        </div>
+        <div className="header-title">Tasks:</div>
         <div className="header-actions">
           <IconButton sx={{ marginRight: "10px" }} onClick={handleFilterClick}>
             <FilterAltIcon />
@@ -51,4 +37,4 @@ export const Header: React.FC = memo(() => {
       <FilterMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </>
   );
-});
+};

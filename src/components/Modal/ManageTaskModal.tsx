@@ -1,5 +1,5 @@
-import { ITaskModal } from "@interfaces/IModal";
 import { Modal } from "@mui/material";
+import { ITaskModal } from "interfaces/IModal";
 import { memo } from "react";
 import { ModalBody } from "./ModalBody";
 import { ModalHeader } from "./ModalHeader";
