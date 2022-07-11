@@ -1,9 +1,9 @@
 import { IconButton } from "@mui/material";
-import React from "react";
+import React, { memo } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { IModalHeader } from "../../../interfaces/IModals";
+import { IModalHeader } from "../../../interfaces/IModal";
 
-export const ModalHeader: React.FC<IModalHeader> = ({ title, setModal }) => {
+export const ModalHeader: React.FC<IModalHeader> = memo(({ title, setModal }) => {
   return (
     <div className="modal-header">
       <div className="modal-title">{title}</div>
@@ -16,4 +16,4 @@ export const ModalHeader: React.FC<IModalHeader> = ({ title, setModal }) => {
       </IconButton>
     </div>
   );
-};
+});

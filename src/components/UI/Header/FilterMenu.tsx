@@ -1,6 +1,6 @@
 import { Menu, MenuItem } from "@mui/material";
 import React, { memo } from "react";
-import { IFilterMenu } from "../../../interfaces/IFilterMenu";
+import { IFilterMenu } from "../../../interfaces/IFilter";
 import { appStore, filterTypes } from "../../../store/appStore";
 
 export const FilterMenu: React.FC<IFilterMenu> = memo(({ anchorEl, setAnchorEl }) => {

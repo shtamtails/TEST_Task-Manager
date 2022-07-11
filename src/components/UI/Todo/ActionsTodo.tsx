@@ -1,11 +1,11 @@
 import { IconButton, Menu, MenuItem } from "@mui/material";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { todoStore } from "../../../store/todoStore";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CheckIcon from "@mui/icons-material/Check";
 import { ITodoActionButtons } from "../../../interfaces/ITodo";
 
-export const ActionsTodo: React.FC<ITodoActionButtons> = ({ setModal, id, isCompleted }) => {
+export const ActionsTodo: React.FC<ITodoActionButtons> = memo(({ setModal, id, isCompleted }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -45,4 +45,4 @@ export const ActionsTodo: React.FC<ITodoActionButtons> = ({ setModal, id, isComp
       </Menu>
     </>
   );
-};
+});

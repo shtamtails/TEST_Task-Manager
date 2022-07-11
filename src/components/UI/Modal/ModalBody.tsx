@@ -1,11 +1,11 @@
 import { Button, TextField } from "@mui/material";
 import { toJS } from "mobx";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { uid } from "uid";
 import { todoStore } from "../../../store/todoStore";
-import { IModalBody } from "../../../interfaces/IModals";
+import { IModalBody } from "../../../interfaces/IModal";
 
-export const ModalBody: React.FC<IModalBody> = ({ setModal, edit, id }) => {
+export const ModalBody: React.FC<IModalBody> = memo(({ setModal, edit, id }) => {
   const [newTodoTitle, setNewTodoTitle] = useState<string>("");
   const [newTodoDescription, setNewTodoDescription] = useState<string>("");
   const [newTodoDate, setNewTodoDate] = useState<string>("");
@@ -105,4 +105,4 @@ export const ModalBody: React.FC<IModalBody> = ({ setModal, edit, id }) => {
       </div>
     </div>
   );
-};
+});

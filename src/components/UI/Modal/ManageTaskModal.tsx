@@ -1,11 +1,10 @@
 import { Modal } from "@mui/material";
-import React from "react";
-import { observer } from "mobx-react-lite";
-import { ITaskModal } from "../../../interfaces/ITaskModal";
+import React, { memo } from "react";
 import { ModalHeader } from "./ModalHeader";
 import { ModalBody } from "./ModalBody";
+import { ITaskModal } from "../../../interfaces/IModal";
 
-export const ManageTaskModal: React.FC<ITaskModal> = observer(({ modal, setModal, edit, id }) => {
+export const ManageTaskModal: React.FC<ITaskModal> = memo(({ modal, setModal, edit, id }) => {
   return (
     <Modal open={modal} onClose={() => setModal(false)}>
       <div className="modal-container">

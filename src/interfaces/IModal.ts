@@ -8,3 +8,10 @@ export interface IModalBody {
   edit?: boolean;
   id?: string;
 }
+
+export interface ITaskModal {
+  modal: boolean;
+  setModal: Function;
+  edit?: boolean;
+  id?: string;
+}
