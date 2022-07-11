@@ -7,3 +7,5 @@ Project should contain:
 - Tasks should be saved in browser for cross-session availability
 - Sorting/filtering by status and by outdated tasks
 - Editing all task info / moving task into completed category
+
+Deployed build available at: https://cutt.ly/YLcqilS
