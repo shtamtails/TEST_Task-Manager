@@ -1,9 +1,9 @@
 import { Button, Chip, IconButton } from "@mui/material";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { appStore } from "../../../store/appStore";
-import { ManageTaskModal } from "../Modal/ManageTaskModal";
+import { appStore } from "@store/appStore";
+import { ManageTaskModal } from "@ui/Modal/ManageTaskModal";
 import { memo, useState } from "react";
 import { FilterMenu } from "./FilterMenu";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 export const Header: React.FC = memo(() => {
   const [newTaskModal, setNewTaskModal] = useState<boolean>(false);

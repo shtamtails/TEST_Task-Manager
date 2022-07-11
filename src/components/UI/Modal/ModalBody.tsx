@@ -1,9 +1,9 @@
+import { IModalBody } from "@interfaces/IModal";
 import { Button, TextField } from "@mui/material";
+import { todoStore } from "@store/todoStore";
 import { toJS } from "mobx";
-import React, { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { uid } from "uid";
-import { todoStore } from "../../../store/todoStore";
-import { IModalBody } from "../../../interfaces/IModal";
 
 export const ModalBody: React.FC<IModalBody> = memo(({ setModal, edit, id }) => {
   const [newTodoTitle, setNewTodoTitle] = useState<string>("");

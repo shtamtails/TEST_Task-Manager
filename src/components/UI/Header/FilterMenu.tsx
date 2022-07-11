@@ -1,7 +1,7 @@
+import { IFilterMenu } from "@interfaces/IFilter";
 import { Menu, MenuItem } from "@mui/material";
-import React, { memo } from "react";
-import { IFilterMenu } from "../../../interfaces/IFilter";
-import { appStore, filterTypes } from "../../../store/appStore";
+import { appStore, filterTypes } from "@store/appStore";
+import { memo } from "react";
 
 export const FilterMenu: React.FC<IFilterMenu> = memo(({ anchorEl, setAnchorEl }) => {
   const open = Boolean(anchorEl);

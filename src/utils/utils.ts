@@ -1,4 +1,4 @@
-import { ITodo } from "../interfaces/ITodo";
+import { ITodo } from "@interfaces/ITodo";
 
 export const getDateFromString = (date: string) =>
   new Date(date).toLocaleString("default", { day: "2-digit", month: "long", year: "numeric" });

@@ -1,8 +1,8 @@
+import { ITaskModal } from "@interfaces/IModal";
 import { Modal } from "@mui/material";
-import React, { memo } from "react";
-import { ModalHeader } from "./ModalHeader";
+import { memo } from "react";
 import { ModalBody } from "./ModalBody";
-import { ITaskModal } from "../../../interfaces/IModal";
+import { ModalHeader } from "./ModalHeader";
 
 export const ManageTaskModal: React.FC<ITaskModal> = memo(({ modal, setModal, edit, id }) => {
   return (
