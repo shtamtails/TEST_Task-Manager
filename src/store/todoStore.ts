@@ -1,13 +1,5 @@
 import { makeAutoObservable } from "mobx";
-
-export interface ITodo {
-  id: string;
-  title: string;
-  description: string;
-  isCompleted: boolean;
-  date?: string;
-  tags?: string;
-}
+import { ITodo } from "../interfaces/ITodo";
 
 class TodoStore {
   todos: ITodo[] = [];
