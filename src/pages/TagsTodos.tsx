@@ -4,13 +4,16 @@ import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import { todoStore } from "store/todoStore";
 import { filterByTags } from "utils/utils";
+import useMemo, { useCallback } from "react";
+import { toJS } from "mobx";
 
 export const TagsTodos = observer(() => {
   const { tag } = useParams();
+  const filteredTodos = filterByTags(tag || "", todoStore.todos);
   return (
     <>
       <Typography variant="h6">Filter by tag: {tag}</Typography>
-      {filterByTags(tag ? tag : "", todoStore.todos).map((el) => (
+      {filteredTodos.map((el) => (
         <Todo
           key={el.id}
           id={el.id}

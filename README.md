@@ -11,6 +11,7 @@ Project should contain:
 Deployed build available at: https://cutt.ly/YLcqilS
 
 #### Tech Stack:
+
 - React
 - TypeScript
 - MobX
